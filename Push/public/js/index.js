@@ -49,9 +49,11 @@ messaging.onMessage(function (payload) {
     body: payload.notification.body,
     icon: "/your-icon-url.png",
   });
-  notification.onclick((event) => {
+  notification.onclick = (event) => {
     console.log("Notification clicked!");
-  });
+    // You can also redirect the user to a specific page
+    window.location.href = "https://trade-hero-notification.web.app"; // Optional
+  };
   // self.registration.showNotifica tion(notificationTitle, notificationOptions);
 });
 
