@@ -22,6 +22,30 @@ if ("serviceWorker" in navigator) {
     .register("/firebase-messaging-sw.js")
     .then((registration) => {
       console.log("Service worker successfully registered:", registration);
+      messaging.onMessage(function (payload) {
+        console.log(
+          "[firebase-messaging-sw.js] Received foreground message ",
+          payload
+        );
+        if (Notification.permission === "granted") {
+          const notification = new Notification(payload.notification.title, {
+            body: payload.notification.body,
+            icon: "/your-icon-url.png",
+          });
+          notification.onclick((event) => {
+            console.log("Notification clicked!");
+          });
+        }
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+          body: payload.notification.body,
+          icon: "/your-icon.png", // Optional: replace with your icon path
+        };
+        registration.showNotification(
+          notificationTitle,
+          notificationOptions
+        );
+      });
     })
     .catch((err) => {
       console.error("Service Worker registration failed:", err);
@@ -53,7 +77,12 @@ messaging.onMessage(function (payload) {
       console.log("Notification clicked!");
     });
   }
-  // self.registration.showNotifica tion(notificationTitle, notificationOptions);
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+      body: payload.notification.body,
+      icon: "/your-icon.png", // Optional: replace with your icon path
+    };
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 requestNotificationPermission();
