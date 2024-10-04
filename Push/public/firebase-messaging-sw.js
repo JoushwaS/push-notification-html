@@ -62,22 +62,18 @@ self.addEventListener("notificationclick", function (event) {
   );
 });
 messaging.onMessage(function (payload) {
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon,
-  };
-  // console.log(notificationTitle,notificationOptions)
-
-  if (!("Notification" in window)) {
-    console.log("This browser does not support system notifications.");
-  } else if (Notification.permission === "granted") {
-    // If it's okay let's create a notification
-    var notification = new Notification(notificationTitle, notificationOptions);
-    notification.onclick = function (event) {
-      event.preventDefault();
-      window.open(payload.notification.click_action, "_blank");
-      notification.close();
-    };
+  console.log(
+    "[firebase-messaging-sw.js] Received foreground message ",
+    payload
+  );
+  if (Notification.permission === "granted") {
+    const notification = new Notification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: "/your-icon-url.png",
+    });
+    notification.onclick((event) => {
+      console.log("Notification clicked!");
+    });
   }
+  // self.registration.showNotifica tion(notificationTitle, notificationOptions);
 });

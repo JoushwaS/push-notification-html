@@ -44,14 +44,15 @@ messaging.onMessage(function (payload) {
     "[firebase-messaging-sw.js] Received foreground message ",
     payload
   );
-
-  const notification = new Notification(payload.notification.title, {
-    body: payload.notification.body,
-    icon: "/your-icon-url.png",
-  });
-  notification.onclick((event) => {
-    console.log("Notification clicked!");
-  });
+  if (Notification.permission === "granted") {
+    const notification = new Notification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: "/your-icon-url.png",
+    });
+    notification.onclick((event) => {
+      console.log("Notification clicked!");
+    });
+  }
   // self.registration.showNotifica tion(notificationTitle, notificationOptions);
 });
 
