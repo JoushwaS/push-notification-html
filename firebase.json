@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "public": "Push/public",
+    "site":"trade-hero-notification",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

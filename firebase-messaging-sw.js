@@ -43,7 +43,7 @@ self.addEventListener("notificationclick", function (event) {
   event.notification.close(); // Close the notification
 
   // Define the URL to redirect to when the notification is clicked
-  const redirectUrl = "https://google.com"; // Change this to your desired URL
+  const redirectUrl = "https://trade-hero-notification.web.app"; // Change this to your desired URL
 
   // Open the URL in the current tab or a new one
   event.waitUntil(
