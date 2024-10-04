@@ -28,23 +28,20 @@ if ("serviceWorker" in navigator) {
           payload
         );
         if (Notification.permission === "granted") {
-          const notification = new Notification(payload.notification.title, {
+          // const notification = new Notification(payload.notification.title, {
+          //   body: payload.notification.body,
+          //   icon: "/your-icon-url.png",
+          // });
+          // notification.onclick((event) => {
+          //   console.log("Notification clicked!");
+          // });
+          const notificationTitle = payload.notification.title;
+          const notificationOptions = {
             body: payload.notification.body,
-            icon: "/your-icon-url.png",
-          });
-          notification.onclick((event) => {
-            console.log("Notification clicked!");
-          });
+            icon: "/your-icon.png", // Optional: replace with your icon path
+          };
+          registration.showNotification(notificationTitle, notificationOptions);
         }
-        const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-          body: payload.notification.body,
-          icon: "/your-icon.png", // Optional: replace with your icon path
-        };
-        registration.showNotification(
-          notificationTitle,
-          notificationOptions
-        );
       });
     })
     .catch((err) => {
@@ -77,11 +74,11 @@ messaging.onMessage(function (payload) {
       console.log("Notification clicked!");
     });
   }
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      icon: "/your-icon.png", // Optional: replace with your icon path
-    };
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: "/your-icon.png", // Optional: replace with your icon path
+  };
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
