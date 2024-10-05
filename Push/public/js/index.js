@@ -41,9 +41,7 @@ function requestNotificationPermission() {
     }
   });
 }
-document
-  .getElementById("requestPermissionButton")
-  .addEventListener("click", requestNotificationPermission);
+
 messaging.onMessage(function (payload) {
   console.log(
     "[firebase-messaging-sw.js] Received foreground message ",
