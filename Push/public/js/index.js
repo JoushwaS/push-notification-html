@@ -10,6 +10,25 @@ const firebaseConfig = {
   measurementId: "G-5QKMBBGWTK",
 };
 
+// Check for notification permission on load
+function checkNotificationPermission() {
+  if (Notification.permission !== "granted") {
+    document.getElementById("requestPermissionButton").style.display = "block";
+    document.getElementById("notificationToggle").style.display = "none";
+  } else {
+    document.getElementById("requestPermissionButton").style.display = "none";
+    document.getElementById("notificationToggle").style.display = "block";
+  }
+}
+
+// Add event listener for permission request button
+document
+  .getElementById("requestPermissionButton")
+  .addEventListener("click", requestNotificationPermission);
+
+// Call function to check permission status on load
+checkNotificationPermission();
+
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
@@ -190,9 +209,7 @@ function clearError() {
   errorMessage.style.display = "none";
   errorMessage.textContent = "";
 }
-
-// Handle user login
-authButton.addEventListener("click", () => {
+const handleLogin = () => {
   const email = authEmail.value.trim();
   const password = authPassword.value.trim();
 
@@ -218,7 +235,10 @@ authButton.addEventListener("click", () => {
       console.error("Login failed:", error);
       showError("Login failed: " + error.message);
     });
-});
+};
+// Handle user login
+authButton.addEventListener("click", handleLogin);
+authButton.addEventListener("touchstart", handleLogin);
 
 // Handle user logout
 logoutButton.addEventListener("click", () => {
