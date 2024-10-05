@@ -10,21 +10,7 @@ const firebaseConfig = {
   measurementId: "G-5QKMBBGWTK",
 };
 
-// Check for notification permission on load
-function checkNotificationPermission() {
-  if (Notification.permission !== "granted") {
-    document.getElementById("requestPermissionButton").style.display = "block";
-    document.getElementById("notificationToggle").style.display = "none";
-  } else {
-    document.getElementById("requestPermissionButton").style.display = "none";
-    document.getElementById("notificationToggle").style.display = "block";
-  }
-}
-
 // Add event listener for permission request button
-
-// Call function to check permission status on load
-checkNotificationPermission();
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
@@ -166,7 +152,7 @@ notificationToggle.addEventListener("change", async function (event) {
     // Try subscribing to the topic
     const result = await subscribeToTopic(token, "test");
     if (result.result.successCount == 1) {
-      alert("Subscribed to Topic");
+      // alert("Subscribed to Topic");
     } else {
       alert("Failed to subscribe to Topic");
       // Revert the toggle state if subscription fails
@@ -179,7 +165,7 @@ notificationToggle.addEventListener("change", async function (event) {
     const result = await unsubscribeFromTopic(token, "test");
 
     if (result.result.successCount == 1) {
-      alert("Unsubscribed from Topic");
+      // alert("Unsubscribed from Topic");
     } else {
       alert("Failed to unsubscribe from Topic");
       // Revert the toggle state if unsubscription fails
