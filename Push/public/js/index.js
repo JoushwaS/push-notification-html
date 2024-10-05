@@ -22,9 +22,6 @@ function checkNotificationPermission() {
 }
 
 // Add event listener for permission request button
-document
-  .getElementById("requestPermissionButton")
-  .addEventListener("click", requestNotificationPermission);
 
 // Call function to check permission status on load
 checkNotificationPermission();
@@ -58,6 +55,9 @@ function requestNotificationPermission() {
     }
   });
 }
+document
+  .getElementById("requestPermissionButton")
+  .addEventListener("click", requestNotificationPermission);
 messaging.onMessage(function (payload) {
   console.log(
     "[firebase-messaging-sw.js] Received foreground message ",
@@ -103,63 +103,47 @@ const notificationToggle = document.getElementById("notificationToggle");
 const notificationHistory = document.getElementById("notificationHistory");
 
 // Function to subscribe to a topic
-function subscribeToTopic(token, topic) {
+async function subscribeToTopic(token, topic) {
   const apiUrl =
-    "https://us-central1-trade-hero-5b25d.cloudfunctions.net/subscribeToTopic"; // Replace with your API endpoint
+    "https://us-central1-trade-hero-5b25d.cloudfunctions.net/subscribeToTopic";
 
-  // Make a POST request to subscribe to the topic
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      // "Authorization": `Bearer ${token}`, // Include token in headers if required
-    },
-    body: JSON.stringify({ data: { token: token, topic: topic } }),
-  })
-    .then((response) => {
-      console.log("response ", response);
-      if (response.successCount) {
-        alert("Subscribed to Topic");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Successfully subscribed to topic:", data);
-    })
-    .catch((error) => {
-      console.log("Error subscribing to topic:", error);
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data: { token: token, topic: topic } }),
     });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("Error subscribing to topic:", error);
+    return { successCount: 0 }; // Return 0 to indicate failure
+  }
 }
 
 // Function to unsubscribe from a topic
-function unsubscribeFromTopic(token, topic) {
-  // Use Firebase Admin SDK on your backend to handle topic unsubscriptions
-
+async function unsubscribeFromTopic(token, topic) {
   const apiUrl =
-    "https://us-central1-trade-hero-5b25d.cloudfunctions.net/unsubscribeFromTopic"; // Replace with your API endpoint
+    "https://us-central1-trade-hero-5b25d.cloudfunctions.net/unsubscribeFromTopic";
 
-  // Make a POST request to subscribe to the topic
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      // "Authorization": `Bearer ${token}`, // Include token in headers if required
-    },
-    body: JSON.stringify({ data: { token: token, topic: topic } }),
-  })
-    .then((response) => {
-      console.log("response ", response);
-      if (response.successCount) {
-        alert("Subscribed to Topic");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Successfully subscribed to topic:", data);
-    })
-    .catch((error) => {
-      console.log("Error subscribing to topic:", error);
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data: { token: token, topic: topic } }),
     });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log("Error unsubscribing from topic:", error);
+    return { successCount: 0 }; // Return 0 to indicate failure
+  }
 }
 
 // Toggle event listener to trigger subscription/unsubscription
@@ -175,12 +159,32 @@ notificationToggle.addEventListener("change", async function (event) {
   // Get the device token
   const token = await messaging.getToken();
   console.log("token>>>>", token);
+
   if (event.target.checked) {
     console.log("Subscribing to topic...", token);
-    subscribeToTopic(token, "test");
+
+    // Try subscribing to the topic
+    const result = await subscribeToTopic(token, "test");
+    if (result.result.successCount == 1) {
+      alert("Subscribed to Topic");
+    } else {
+      alert("Failed to subscribe to Topic");
+      // Revert the toggle state if subscription fails
+      event.target.checked = false;
+    }
   } else {
     console.log("Unsubscribing from topic...");
-    unsubscribeFromTopic(token, "test");
+
+    // Try unsubscribing from the topic
+    const result = await unsubscribeFromTopic(token, "test");
+
+    if (result.result.successCount == 1) {
+      alert("Unsubscribed from Topic");
+    } else {
+      alert("Failed to unsubscribe from Topic");
+      // Revert the toggle state if unsubscription fails
+      event.target.checked = true;
+    }
   }
 });
 
