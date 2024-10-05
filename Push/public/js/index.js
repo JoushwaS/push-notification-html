@@ -22,27 +22,6 @@ if ("serviceWorker" in navigator) {
     .register("/firebase-messaging-sw.js")
     .then((registration) => {
       console.log("Service worker successfully registered:", registration);
-      messaging.onMessage(function (payload) {
-        console.log(
-          "[firebase-messaging-sw.js] Received foreground message ",
-          payload
-        );
-        if (Notification.permission === "granted") {
-          // const notification = new Notification(payload.notification.title, {
-          //   body: payload.notification.body,
-          //   icon: "/your-icon-url.png",
-          // });
-          // notification.onclick((event) => {
-          //   console.log("Notification clicked!");
-          // });
-          const notificationTitle = payload.notification.title;
-          const notificationOptions = {
-            body: payload.notification.body,
-            icon: "/your-icon.png", // Optional: replace with your icon path
-          };
-          registration.showNotification(notificationTitle, notificationOptions);
-        }
-      });
     })
     .catch((err) => {
       console.error("Service Worker registration failed:", err);
@@ -66,20 +45,26 @@ messaging.onMessage(function (payload) {
     payload
   );
   if (Notification.permission === "granted") {
-    const notification = new Notification(payload.notification.title, {
-      body: payload.notification.body,
-      icon: "/your-icon-url.png",
-    });
-    notification.onclick((event) => {
-      console.log("Notification clicked!");
+    // const notification = new Notification(payload.notification.title, {
+    //   body: payload.notification.body,
+    //   icon: "/your-icon-url.png",
+    // });
+    // notification.onclick((event) => {
+    //   console.log("Notification clicked!");
+    // });
+
+    const title = payload.notification.title; // Your title
+    const body = payload.notification.body; // Your body text
+
+    toastr.info(`${title}<br>${body}`, "Notification", {
+      positionClass: "toast-top-right", // Positioning of the toast
+      timeOut: "3000", // Duration in milliseconds
+      closeButton: true, // Show close button
+      progressBar: true, // Show progress bar
+      enableHtml: true, // Allow HTML content in the toast
     });
   }
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/your-icon.png", // Optional: replace with your icon path
-  };
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 requestNotificationPermission();
@@ -266,7 +251,7 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 // OneSignal Initialization
-window.OneSignal = window.OneSignal || [];
+// window.OneSignal = window.OneSignal || [];
 // OneSignal.push(function () {
 //   console.log("Initializing OneSignal.");
 //   OneSignal.init({
