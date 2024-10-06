@@ -197,6 +197,7 @@ function clearError() {
   errorMessage.style.display = "none";
   errorMessage.textContent = "";
 }
+
 const handleLogin = () => {
   console.log("Login button clicked");
   const email = authEmail.value.trim();
@@ -212,7 +213,8 @@ const handleLogin = () => {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
+      
       console.log("User signed in successfully:", userCredential.user.email);
       closeAuthModal();
       clearError();
@@ -234,8 +236,11 @@ logoutButton.addEventListener("click", () => {
   firebase
     .auth()
     .signOut()
-    .then(() => {
+    .then(async () => {
       console.log("User signed out successfully.");
+      console.log("unsubscribing from topic");
+      const token = await messaging.getToken();
+      await unsubscribeFromTopic(token, "test");
       mainContent.style.display = "none";
       showAuthModal();
     })
