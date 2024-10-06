@@ -198,6 +198,7 @@ function clearError() {
   errorMessage.textContent = "";
 }
 const handleLogin = () => {
+  console.log("Login button clicked");
   const email = authEmail.value.trim();
   const password = authPassword.value.trim();
 

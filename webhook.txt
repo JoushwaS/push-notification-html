@@ -1,0 +1,11 @@
+url : https://us-central1-trade-hero-5b25d.cloudfunctions.net/sendNotificationToTopic
+
+payload: 
+
+{
+    "data":{
+        "topic":"test", // all users are subscribing at test for now
+        "title": "test title",
+        "message": "test message"
+    }
+}
